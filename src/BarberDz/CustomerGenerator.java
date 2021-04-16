@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -7,14 +8,19 @@ package BarberDz;
 
 import java.util.Random;
 import java.util.*;
-
+import java.text.NumberFormat;
 /**
  *
  * @author Kamarali Anatolii
  */
-public class CustomerGenerator implements Runnable {
+public class CustomerGenerator extends Thread {
+
+    private static int counter;
+    private String name;
     private int sleep;
     private BarberShop barberShop;
+    private int tmin;
+    private int tmax;
 
     // відает листами по 2-3 человека 
     // Напрямую в очередь 
@@ -23,41 +29,42 @@ public class CustomerGenerator implements Runnable {
     // Логика возраст у клиента клиента 
     // Нужно прописать логику. 
     // Промежутки времени System 
-    public CustomerGenerator(BarberShop shop) {
-        this.barberShop = shop;
-    }
     
+    public CustomerGenerator(BarberShop shop, int z, int y, String name) {
+        this.setDaemon(true);
+        this.barberShop = shop;
+        this.tmin = z;
+        this.tmax = y;
+        this.name = name;
+    }
+
     public void run() {
         Customer temp = null;
-       
-        int c = 4 - new Random().nextInt(2);
         try {
-            System.out.println(" Генератор клиентов начал работать");
-            
-            while (true) {  
-               
-                
+            System.out.println(" Генератор клиентов " + name + " is working ");
+            while (true) {
+                String[] arrl = {"Masha", "Luba", "Kira", "Karina"};
                 List<Customer> customerList = new ArrayList<>();
-                int z = 4 - new Random().nextInt(2) - new Random().nextInt(1);
-                for (int y = 0; y < z; y++) {
-                    if (y == 0) {
-                        temp = new Customer(new Random().nextInt(45) + 18);
-                        System.out.println("Генератор произвел клиента: age " + temp.getAge());
-                        customerList.add(temp);
-                    }
-                    temp = new Customer(new Random().nextInt(45));
-                    System.out.println("Генератор произвел клиента: age " + temp.getAge());
-                    customerList.add(temp);
+                for (int ii = 0; ii < new Random().nextInt(3) + 1; ii++) {
+                    customerList.add(new Customer(new Random().nextInt(15) + 15, arrl[new Random().nextInt(4)]));
+                    System.out.println(" Добавлен клиент " + customerList.get(ii) + " ");
                 }
-                boolean bol = barberShop.setCustomer(customerList);
-                String str = bol?"Клиенты были добавлены удачно в количестве " + customerList.size():"Клиенты не были добавлены в очередь ";
-                System.out.println(str);
-                customerList = null;
-                Thread.sleep(1000);
-            }            
+                counter += customerList.size();
+                System.out.println(" всего сгенерировано клиентов " + counter);
+                barberShop.setCustomer(customerList, this.hashCode());
+                Thread.sleep(500 + tmax * 100);
+            }
         } catch (Exception e) {
             
+            e.printStackTrace();
         }
     }
-    
+
+    /**
+     * @return the counter
+     */
+    public static int getCounter() {
+        return counter;
+    }
+
 }

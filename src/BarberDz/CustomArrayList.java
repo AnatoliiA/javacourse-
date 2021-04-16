@@ -4,29 +4,37 @@
  * and open the template in the editor.
  */
 package BarberDz;
+
 import java.util.*;
+
 /**
  *
  * @author Kamarali Anatolii
  */
 public class CustomArrayList extends ArrayList<Customer> {
-  private int count = 12;
-  @Override
-  public boolean add(Customer e) {
-      if (this.size() < count) {
-          return super.add(e);
-      }
-     // shift
-      return false;
-  }
-  @Override
-  public boolean addAll(Collection<? extends Customer> c){
-    this.size();
-   super.addAll(c);
-   return true;
-  }
-  
-  
+
+    private int count = 12;
+
+    @Override
+    public boolean add(Customer e) {
+        if (this.size() < count) {
+            return super.add(e);
+        }
+        // shift
+        return false;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends Customer> c) {
+        int line;
+        line = this.size() + c.size();
+        if (line > 12) {
+            return false;
+        }
+        super.addAll(c);
+        return true;
+    }
+
     /**
      * @return the count
      */
@@ -41,6 +49,4 @@ public class CustomArrayList extends ArrayList<Customer> {
         this.count = count;
     }
 
-    
-    
 }

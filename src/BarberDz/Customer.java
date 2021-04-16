@@ -4,34 +4,57 @@
  * and open the template in the editor.
  */
 package BarberDz;
+
 import java.util.*;
+import java.text.NumberFormat;
 /**
  *
  * @author Kamarali Anatolii
  */
 public class Customer {
+    private DebugClass db = new DebugClass();
+    private int model = new Random().nextInt(4);
+    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+    /**
+     * @return the name
+     */
+
+    public String getName() {
+        return name;
+    }
     private long entance;
     private int age;
-    /**
-     * @return the entance
-     */
+    private String name;
+
+    public Customer(int age, String name) {
+        this.age = age;
+        this.name = name;
+    }
+
     public long getEntance() {
         return entance;
     }
-   
-    
-    public Customer(int age){
-        this.age = age;
-    
+
+    public void setEntrance() {
+        this.entance = System.currentTimeMillis();
+        db.printDebug( " клиент получил время входа в очредб " + this.entance);
     }
-    public void setEntrance(){
-      this.entance = System.currentTimeMillis();
+
+    public int getAge() {
+        return age;
+    }
+
+    @Override
+    public String toString() {
+        String sttr;      
+        sttr = this.entance==0?"":" время от входа в очередь " + (double)((System.currentTimeMillis() - this.entance) / 1000.0);
+        return "  клиент " + this.name + " возраст " + this.age + " тип стрижки клиента " + getModel() + sttr;
     }
 
     /**
-     * @return the age
+     * @return the model
      */
-    public int getAge() {
-        return age;
+    public int getModel() {
+        return model;
     }
 }
